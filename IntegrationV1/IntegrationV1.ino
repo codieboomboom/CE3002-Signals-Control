@@ -7,20 +7,18 @@ Code for CE3002 Demo:
 /*
  * Variables Declaration
  */
- 
-#define groundpin 8 // write 0 to get ground
-#define bluepin 9 // select the pin for the green LED
-#define greenpin 10 // select the pin for the red LED
-#define redpin 11 // select the pin for the blue LED
-#define buzzer 4 //buzzer to arduino pin 9 
-#define grd 6 // grd for buzzer
 
-#define LCD_RS 0
-#define LCD_EN 1
-#define LCD_D4 2
-#define LCD_D5 3
-#define LCD_D6 12
-#define LCD_D7 13
+#define BLUE 3 // select the pin for the green LED
+#define GREEN 2 // select the pin for the red LED
+#define RED 1 // select the pin for the blue LED
+#define BUZZ 10 //BUZZ to arduino pin 9 
+
+#define LCD_RS 9
+#define LCD_EN 8
+#define LCD_D4 4
+#define LCD_D5 5
+#define LCD_D6 6
+#define LCD_D7 7
 
 LiquidCrystal lcd(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
 
@@ -35,41 +33,37 @@ int realhbeat=1;
 
 
 void setup () {
-  pinMode (greenpin, OUTPUT);
-  pinMode (bluepin, OUTPUT);
-  pinMode (redpin, OUTPUT);
-  pinMode (groundpin, OUTPUT);
- 
-  pinMode (buzzer, OUTPUT);
-  pinMode (grd, OUTPUT);
-  
-  digitalWrite (groundpin, LOW);
-  digitalWrite (grd, LOW);
-
+  pinMode (GREEN, OUTPUT);
+  pinMode (BLUE, OUTPUT);
+  pinMode (RED, OUTPUT);
+  pinMode (BUZZ, OUTPUT);
   lcd.begin(16,2);
-  
-
   Serial.begin(1200);
   pinMode(A0,INPUT); //connected to D7
+  lcd.print("Insert Your Finger! ");
   StartTime = millis();
 }
 
  
 void loop () {
-  lcd.clear();
  // sig= 1000;
+  //read in signal 0 - 1023 for PPG
+  
   sig=analogRead(A0);
-  lcd.print("HeartBeat:");
-  lcd.print(sig);
+  if(sig!=0){
+    lcd.clear();
+    lcd.print("HeartBeat:");
+    lcd.print(sig);
+  }
   
   if(sig >=1000 && flag ==0)
   {
       
-    analogWrite (redpin,  100);      //red
+    analogWrite (RED,  100);      //red
     delay(10);
-    tone(buzzer, 1000); // Send 1KHz sound signal...
+    tone(BUZZ, 1000); // Send 1KHz sound signal...
     delay(90);        // ...for 1 sec
-    noTone(buzzer);     // Stop sound...
+    noTone(BUZZ);     // Stop sound...
     delay(10);        // ...for 1sec 
     flag=1;
     hbeat++;
@@ -96,13 +90,13 @@ void loop () {
   Serial.println(sig);
 
  
- // analogWrite (greenpin,   100);  //green
-  //analogWrite (bluepin, 100);    //blue
- // analogWrite (redpin,  100);      //red
+ // analogWrite (GREEN,   100);  //green
+  //analogWrite (BLUE, 100);    //blue
+ // analogWrite (RED,  100);      //red
 
-  /*  tone(buzzer, 1000); // Send 1KHz sound signal...
+  /*  tone(BUZZ, 1000); // Send 1KHz sound signal...
       delay(500);        // ...for 1 sec
-      noTone(buzzer);     // Stop sound...
+      noTone(BUZZ);     // Stop sound...
       delay(500);        // ...for 1sec 
       */
  
